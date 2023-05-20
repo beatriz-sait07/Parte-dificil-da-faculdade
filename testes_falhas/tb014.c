@@ -55,7 +55,6 @@ void buffer(Lista** l) {
     char* buffer = (char*)malloc(buffer_size * sizeof(char));
     char aux_buf = fgetc(arq_token);
     Node* aux_list = l[cont_adj_begin]->inicio;
-    Node* aux_perc = NULL;
 
     while (aux_buf != EOF) {
         if (aux_buf != ' ' && aux_buf != '\t' && aux_buf != '\n') {
@@ -72,34 +71,11 @@ void buffer(Lista** l) {
         } else {
             if (pos_b > 0) { // Verifica se há caracteres no buffer antes de finalizá-lo
                 buffer[pos_b] = '\0';
+                printf("%s\n", buffer);
+                //comeca a verificacao aqui!
+                
 
-                if (buffer[0] == aux_list->letra) {
-                    int cont = 0;
-                    while (cont < buffer_size && aux_list != NULL && aux_list->next != NULL) {
-                        if (buffer[cont + 1] == aux_list->next->letra) {
-                            //printf("%c -> %c\n", aux_list->next->letra, buffer[cont + 1]);
-                            aux_list = aux_list->next;
-                        } else {
-                            printf("%c || %c\n", aux_list->next->letra, buffer[cont + 1]);
-                        }
-                        cont++;
-                    }
-                printf("\n");
-                } else if(buffer[0] != aux_list->letra){
-                    printf("else if\n");
-                    // int cont_bg2 = 1;
-                    // Node *alpha = l[cont_bg2]->inicio;
-                    // while(cont_bg2 < 36){
-                    //     if(buffer[0] == aux_list->letra){
-
-                    //     }
-                    // }
-                } else {
-                    printf("test\n");
-                }
-
-                pos_b = 0; // setando o buffer
-                buffer_size = 1; //setando o tamanho do buffer
+                pos_b = 0;
                 aux_buf = fgetc(arq_token);
             } else {
                 aux_buf = fgetc(arq_token); // Ignora o caractere de nova linha e continua a leitura

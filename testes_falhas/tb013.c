@@ -70,7 +70,6 @@ void valida_token(Lista **l, char *buffer){
     } 
 }
 
-
 /*void valida_token(Lista **l, char *buffer){
     int cont_l=0, cont_b=0;
     Node *aux = l[cont_l]->inicio;
