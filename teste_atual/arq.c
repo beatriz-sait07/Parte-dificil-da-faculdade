@@ -1,3 +1,3 @@
 auto main (){
-    printf("oi");
+    printf ("oi");
 }
