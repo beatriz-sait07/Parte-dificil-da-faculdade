@@ -60,8 +60,7 @@ void buffer(Lista** l) {
         if (aux_buf != ' ' && aux_buf != '\t' && aux_buf != '\n') {
             buffer[pos_b] = aux_buf;
             pos_b++;
-            // Verifica se o buffer está cheio e realoca mais memória se necessário
-            if (pos_b >= buffer_size) {
+            if (pos_b >= buffer_size) { // Verifica se o buffer está cheio e realoca mais memória se necessário
                 buffer_size *= 2; // Dobrar o tamanho do buffer
                 buffer = (char*)realloc(buffer, buffer_size * sizeof(char));
             }
@@ -113,7 +112,16 @@ void buffer(Lista** l) {
             } else {
                 aux_buf = fgetc(arq_token);
             }
+        } if (pos_b > 0) {
+            int caract_esp = 0;
+            
+            for (int i=0; i <pos_b; i++){
+                if (buffer[i] >= l[35]->inicio->letra && buffer[i] <= l[44]->inicio->letra){
+                    printf("caractere especial: %c\n", buffer[i]);
+                }
+            }
         }
+
     }
 
     fclose(arq_token);
@@ -131,6 +139,11 @@ int main(){
     }
     token(list);
     buffer(list);
+//    int i=35;
+//     while(i < 45){
+//         printf("%c\n", list[i]->inicio->letra);
+//         i++;
+//     }
     free(list); 
     return 0;
 }
