@@ -73,18 +73,18 @@ void buffer(Lista** l) {
             int cont_asp = 0;
             buffer[pos_b] = aux_buf;
             buffer[pos_b + 1] = '\0';
-            if(aux_buf == l[42]->inicio->letra){
-                aux_buf = fgetc(arq_token);
-                while(aux_buf != l[42]->inicio->letra){
-                    buffer[pos_b] = aux_buf;
-                    pos_b++;
-                    if (pos_b >= buffer_size) {
-                        buffer_size *= 2;
-                        buffer = (char*)realloc(buffer, buffer_size * sizeof(char));
-                    }
-                    aux_buf = fgetc(arq_token);
-                }
-            } 
+            // if(aux_buf == l[42]->inicio->letra){
+            //     aux_buf = fgetc(arq_token);
+            //     while(aux_buf != l[42]->inicio->letra){
+            //         buffer[pos_b] = aux_buf;
+            //         pos_b++;
+            //         if (pos_b >= buffer_size) {
+            //             buffer_size *= 2;
+            //             buffer = (char*)realloc(buffer, buffer_size * sizeof(char));
+            //         }
+            //         aux_buf = fgetc(arq_token);
+            //     }
+            // } 
 
             if(buffer[pos_b] == l[j]->inicio->letra){
                 printf("%s ---> token valido: %s\n", buffer, l[j]->token_list);
