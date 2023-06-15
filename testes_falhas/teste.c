@@ -76,7 +76,7 @@ void buffer(Lista** l) {
                     buffer_size *= 2;
                     buffer = (char*)realloc(buffer, buffer_size * sizeof(char));
                 }
-                if (aux_buf == EOF) { // finaliza o laco pois o arquivo acabou e nao encontrou o fechamento do comentario
+                if(aux_buf == EOF){ // finaliza o laco pois o arquivo acabou e nao encontrou o fechamento do comentario
                     printf("\n***Erro! Comentario nao fechado!***\n");
                     break;
                 }
@@ -93,8 +93,8 @@ void buffer(Lista** l) {
             buffer[pos_b] = aux_buf;
             buffer[1] = '\0';
             int cont_caract = 35, caract_valido = 0;
-            while (cont_caract < 79) {
-                if (buffer[pos_b] == l[cont_caract]->inicio->letra) {
+            while(cont_caract < 79){
+                if(buffer[pos_b] == l[cont_caract]->inicio->letra){
                     caract_valido = 1;
                     // printf("%d\n", cont_caract);
                     break;
@@ -103,7 +103,7 @@ void buffer(Lista** l) {
                 }
                 cont_caract++;
             }
-            if (caract_valido == 1) {
+            if(caract_valido == 1){
                 printf("%s --> token valido: %s\n", buffer, l[cont_caract]->token_list);
                 caract_valido = 0;
             } else {
@@ -139,32 +139,22 @@ void buffer(Lista** l) {
                 int cont_buf = 0, cont_adj = 0;
                 aux_list = l[cont_adj_begin]->inicio;
                 while (cont_buf < pos_b && aux_list != NULL) {
-    if (buffer[cont_buf] == aux_list->letra) {
-        cont_adj++;
-        cont_buf++;
-        if (cont_buf == pos_b) { // Verifica se o buffer acabou e se o adjacente também acabou
-            break;
-        }
-        if (aux_list->next->letra != buffer[cont_buf]) {
-            cont_buf = 0;
-            cont_adj_begin++;
-            if (cont_adj_begin >= 35) {
-                break;  // Excedeu o número máximo de listas
-            }
-            aux_list = l[cont_adj_begin]->inicio;
-            continue; // Pular para a próxima posição da lista de adjacência
-        }
-    } else {
-        cont_buf = 0;
-        cont_adj_begin++;
-        if (cont_adj_begin >= 35) {
-            break;  // Excedeu o número máximo de listas
-        }
-        aux_list = l[cont_adj_begin]->inicio;
-    }
-    aux_list = aux_list->next;
-}
-
+                    if (buffer[cont_buf] == aux_list->letra) {
+                        cont_adj++;
+                        cont_buf++;
+                        if (cont_buf == pos_b) {
+                            break;  // Verificou todos os caracteres do buffer
+                        }
+                    } else {
+                        cont_buf = 0;
+                        cont_adj_begin++;
+                        if (cont_adj_begin >= 35) {
+                            break;  // Excedeu o número máximo de listas
+                        }
+                        aux_list = l[cont_adj_begin]->inicio;
+                    }
+                    aux_list = aux_list->next;
+                }
 
                 if (cont_adj != cont_buf) {
                     printf("token nao identificado!\n");
