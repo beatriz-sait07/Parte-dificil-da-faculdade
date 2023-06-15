@@ -1,3 +1,4 @@
-auto main (){
-    printf ("Hello World!");
+do main (){
+    int val = 0;
+    printf ("Hello World");
 }
