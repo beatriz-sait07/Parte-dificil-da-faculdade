@@ -1,3 +1,5 @@
+//separacao 100%
+// fazer ele colocar a string em um vetor realocavel
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,7 +9,7 @@
 
 void token(Lista **l) {
     FILE *arq;
-    arq = fopen("tokens.txt", "r");
+    arq = fopen("tokens_beatriz.txt", "r");
     if (arq == NULL) {
         printf("Erro ao abrir o arquivo!\n");
         exit(1);
@@ -31,20 +33,17 @@ void token(Lista **l) {
             strcpy(l[j]->token_list, vet);
             free(vet);
             j++;
-            
         } else {
             add_Last(l[i], aux);
         }
         aux = fgetc(arq);
-        
     }
-
     fclose(arq);
 }
 
 void buffer(Lista** l) {
     FILE* arq_token;
-    arq_token = fopen("arq.c", "r");
+    arq_token = fopen("arq_beatriz.c", "r");
 
     if (arq_token == NULL) {
         printf("Erro ao abrir o arquivo! -> lex\n");
@@ -55,31 +54,53 @@ void buffer(Lista** l) {
     char* buffer = (char*)malloc(buffer_size * sizeof(char));
     char aux_buf = fgetc(arq_token);
     Node* aux_list = l[cont_adj_begin]->inicio;
+    int buffer_printed = 0; // Flag para controlar se o buffer já foi impresso
 
     while (aux_buf != EOF) {
-        if (aux_buf != ' ' && aux_buf != '\t' && aux_buf != '\n') {
+        int j = 35;
+        int controle = 0;
+        while (j <= 43) {
+            if (aux_buf == l[j]->inicio->letra) {
+                controle = 1;
+                break;
+            }
+            j++;
+        }
+        if(controle == 1){  
+            int cont_asp = 0;
+            buffer[pos_b] = aux_buf;
+            buffer[pos_b + 1] = '\0';
+            if(buffer[pos_b] == l[j]->inicio->letra){
+                printf("%s ---> token valido: %s\n", buffer, l[j]->token_list);
+                
+            } else {
+                printf("%s ---> token nao identificado!\n", buffer);
+            }
+            pos_b = 0;
+        }
+             
+        if (aux_buf != ' ' && aux_buf != '\t' && aux_buf != '\n' && controle != 1) { // enquanto nao for espaco, tab ou quebra de linha
             buffer[pos_b] = aux_buf;
             pos_b++;
-            if (pos_b >= buffer_size) { // Verifica se o buffer está cheio e realoca mais memória se necessário
-                buffer_size *= 2; // Dobrar o tamanho do buffer
+            if (pos_b >= buffer_size) {
+                buffer_size *= 2;
                 buffer = (char*)realloc(buffer, buffer_size * sizeof(char));
             }
             aux_buf = fgetc(arq_token);
         } else {
             if (pos_b > 0) {
                 buffer[pos_b] = '\0';
-                printf ("%s  ->  ", buffer);
-                int cont_bg2 = 1, cont = 0;
+                printf("%s  ->  ", buffer);
+                int cont_bg2 = 1;
                 aux_list = l[cont_bg2]->inicio;
                 while (cont_bg2 < 35) {
                     if (buffer[0] == aux_list->letra) {
                         cont_adj_begin = cont_bg2;
                         aux_list = l[cont_adj_begin]->inicio;
                         break;
-                    } else if (buffer[0] != aux_list->letra) {
-                        cont_bg2++;
-                        aux_list = l[cont_bg2]->inicio;
                     }
+                    cont_bg2++;
+                    aux_list = l[cont_bg2]->inicio;
                 }
                 int cont_buf = 0, cont_adj = 0;
                 aux_list = l[cont_adj_begin]->inicio;
@@ -108,30 +129,17 @@ void buffer(Lista** l) {
                 }
                 pos_b = 0;
                 buffer_size = 1;
-                aux_buf = fgetc(arq_token);
-            } else {
-                aux_buf = fgetc(arq_token);
-            }
-        } if (pos_b > 0) {
-            int caract_esp = 0;
-            
-            for (int i=0; i <pos_b; i++){
-                if (buffer[i] >= l[35]->inicio->letra && buffer[i] <= l[44]->inicio->letra){
-                    printf("caractere especial: %c\n", buffer[i]);
-                }
-            }
+            } 
+            aux_buf = fgetc(arq_token);
         }
-
     }
-
     fclose(arq_token);
     free(buffer);
 }
 
 int main(){
-    int n = 77;
+    int n = 79;
     Lista **list = (Lista **) malloc(n * sizeof(Lista *));
-
 
     if (list == NULL){
         printf("Erro ao alocar memoria!\n");
@@ -139,11 +147,6 @@ int main(){
     }
     token(list);
     buffer(list);
-//    int i=35;
-//     while(i < 45){
-//         printf("%c\n", list[i]->inicio->letra);
-//         i++;
-//     }
     free(list); 
     return 0;
 }

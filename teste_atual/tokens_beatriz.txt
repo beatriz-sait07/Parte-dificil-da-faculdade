@@ -13,8 +13,8 @@ extern EXTERN
 float FLOAT
 for FOR
 goto GOTO
-if IF
 int INT
+if IF
 long LONG
 main MAIN
 printf PRINTF
