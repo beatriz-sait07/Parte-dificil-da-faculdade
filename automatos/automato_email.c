@@ -34,7 +34,23 @@ bool ta_vazia(const struct lista *l){
     return l->inicio == NULL;
 }
 
+void add(struct lista *l, char letra){
+    struct node *novo = criar_no(letra);
+
+    if(ta_vazia){
+        l->fim = l->fim = novo;
+    } else {
+        l->fim->next = novo;
+        l->fim = l->fim->next;
+    }
+}
+
 int main (){
+    struct lista *main = criar_lista();
+
+    add(main, 'b');
+    add(main, 'i');
+    add(main, 'a');
 
     return 0;
 }
