@@ -37,9 +37,40 @@ int mdc(int a, int b) {
     return a;
 }
 
+//agora acha o "E"
+int achar_e(int n, int totiente){
+    int *mod = malloc(100 * sizeof(int));
+    if (mod == NULL) {
+        printf("Erro ao alocar memória.\n");
+        exit(EXIT_FAILURE);
+    }
+    int aux_armazena=0; // Aqui definimos um array mod com espaço suficiente para armazenar valores
+    for(int i=totiente; i>=0; i--){
+        if(mdc(i,totiente) == 1){
+            if(mdc(i,n) == 1){
+                if(eh_primo(i)){
+                    mod[aux_armazena] = i; 
+                    aux_armazena++;
+                }
+            }
+        }
+    }
+
+    int tam_pont = aux_armazena;
+    
+    srand(time(NULL));
+
+    int indice_aleatorio = rand() % tam_pont;
+
+    int e = mod[indice_aleatorio];
+    free(mod);
+
+    return e;
+}
 
 int main (){
     int p_main=3, q_main=11;
+
     printf("P: %d\nQ: %d\n", p_main, q_main);
 
     printf("N: %d\n", achar_n(p_main,q_main));
