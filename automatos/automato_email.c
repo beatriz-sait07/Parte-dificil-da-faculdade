@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<stdbool.h>
 
 
 //--------------------------LISTA ENCADEADA----------------------
@@ -27,6 +28,10 @@ struct lista *criar_lista(){
     l->fim = NULL;
 
     return l;
+}
+
+bool ta_vazia(const struct lista *l){
+    return l->inicio == NULL;
 }
 
 int main (){
