@@ -13,6 +13,7 @@ struct node{
 
 struct lista{
     struct node *inicio, *fim;
+    int tam;
 };
 
 struct node *criar_no(char letra){
@@ -27,6 +28,7 @@ struct lista *criar_lista(){
     struct lista *l = (struct lista*)calloc(1, sizeof(struct lista));
     l->inicio = NULL;
     l->fim = NULL;
+    l->tam = 0;
 
     return l;
 }
@@ -94,7 +96,7 @@ void leitura_arquivo(struct lista **l) {
         } else {
             if (cont_email >= tam - 1) { 
                 tam *= 2;
-                email = (char *)realloc(email, tam * sizeof(char));
+                email = (char *)realloc(email, tam * sizeof(char)); //aumentando o tamanho dinamicamente
             }
             email[cont_email] = aux_leitura; 
             add(l[cont_adj], aux_leitura); 
@@ -107,28 +109,81 @@ void leitura_arquivo(struct lista **l) {
     fclose(file);
 }
 
+void verifica_email(struct lista **l, struct lista *p, struct lista *e, int i) {
+    struct node *aux = l[i]->inicio;
+    struct node *aux_p = p->inicio, *aux_e = e->inicio;
+
+    while (aux != NULL) {
+        printf("entrou laco GERAL\n");
+        if (aux->letras >= 'a' && aux->letras <= 'z') {
+            printf("entrou condicao 000\n");
+            aux = aux->next;
+            while (aux != NULL && aux->letras >= 'a' && aux->letras <= 'z') {
+                aux = aux->next;
+                if (aux != NULL && aux->letras == '@') { // Verifica '@' e '@' maiúsculo
+                    printf("entrou condicao 222\n");
+                    aux = aux->next;
+                    if (aux != NULL) {
+                        printf("entrou condicao 333\n");
+                        if (aux->letras == aux_e->letras) {
+                            printf("entrou condicao 444\n");
+                            aux = aux->next;
+                            aux_e = aux_e->next;
+                            do {
+                                printf("entrou do");
+                                if (aux->letras == aux_e->letras) {
+                                    printf("entrou condicao 555\n");
+                                    aux = aux->next;
+                                    aux_e = aux_e->next;
+                                } //bota o else
+                            } while (aux != NULL && aux_e != NULL);
+                            if(aux == NULL && aux_e == NULL){
+                                printf("Email Dicente: ");
+                                imprime(l[i]);
+                            }
+
+                        } else if (aux->letras == aux_p->letras) {
+                            aux = aux->next;
+                            aux_e = aux_e->next;
+                            do {
+                                if (aux != NULL && aux_e != NULL && aux->letras == aux_e->letras) {
+                                    aux = aux->next;
+                                    aux_e = aux_e->next;
+                                } //bota o else
+                            } while (aux != NULL && aux_e != NULL);
+                                if(aux == NULL && aux_e == NULL){
+                                printf("Email Docente: ");
+                                imprime(l[i]);
+                            }
+                        } else {
+                            printf("Email nao institucional do IFMS! \n");
+                        }
+                    }
+                    break;
+                }
+            } // Verificação sobrenome
+            if (aux != NULL && aux->letras >= 'a' && aux->letras <= 'z') {
+                printf("entrou condicao 111\n");
+                aux = aux->next;
+                while (aux != NULL && aux->letras >= 'a' && aux->letras <= 'z') {
+                    aux = aux->next;
+                } // Verificação caso haja números em sobrenomes
+                if (aux != NULL && aux->letras >= '0' && aux->letras <= '9') {
+                    aux = aux->next;
+                }
+                while (aux != NULL && aux->letras >= '0' && aux->letras <= '9') {
+                    aux = aux->next;
+                }
+            }
+        }
+        if (aux != NULL) {
+            aux = aux->next;
+        }
+    }
+}
+
+
 int main (){
-   /* teste de validacao de add da funcao inicial
-    struct  lista *main = criar_lista();
-    add(main, 'b');
-    add(main, 'e');
-    add(main, 'a');
-    add(main, 't');
-    add(main, 'r');
-    add(main, 'i');
-    add(main, 'z');
-
-    imprime(main);
-
-    // for (int i = 0; i <=8; i++) {
-    //     exluir_lista(&main, i);
-    // }
-
-    exluir_lista(&main, 0);
-
-    printf("\n");
-    -----------------------------------------------------------------------------------------*/
-
     FILE *file = fopen("entrada_email_beatriz.csv", "r");
 
     //------so pra deixar dinamico com o tamanho do arquivo-------
@@ -136,6 +191,7 @@ int main (){
         fprintf(stderr, "(MAIN)ERRO: arquivo nao encontrado! ");
         exit(1);
     }
+    
     int cont_linha = 0, cont_virg=0;
     char aux = fgetc(file);
 
@@ -150,17 +206,36 @@ int main (){
     }
     fclose(file);
 
-    //inicio da estrutura geral da lista
-    struct lista **main = (struct lista**)malloc(cont_linha * sizeof(struct lista*));
+    //inicio da estrutura geral da lista + listas para auxiliar na verificacao.
+    struct lista **main = (struct lista**)malloc(cont_virg * sizeof(struct lista*));
+    struct lista *estudante = criar_lista();
+    struct lista *prof = criar_lista();
+    char e[21] = "estudante.ifms.edu.br";
+    char p[12] = "ifms.edu.br";
+
+    for(int i=0; i<21; i++){ //laco para add letra a letra em estudantes
+        add(estudante, e[i]);
+    }
+    for(int i=0; i<12; i++){ // laco para add letra a letra em prof
+        add(prof, p[i]);
+    }
+
+
+    // imprime(estudante);
+    // printf("\n");
+    // imprime(prof);
+    // printf("\n");
 
     leitura_arquivo(main);
 
     printf("linha: %d\nvirgula: %d\n", cont_linha, cont_virg);
+    
     for (int i = 0; i < cont_virg; i++) {
-        printf("Lista de adjacência do vértice %d: ", i);
+        printf("Lista %d: ", i);
         imprime(main[i]);
         printf("\n");
     }
 
+    verifica_email(main, estudante, prof, 1);
     return 0;
 }

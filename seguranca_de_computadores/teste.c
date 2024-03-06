@@ -4,12 +4,12 @@
 #include<time.h>
 
 //primeiro passo, escolher dois numeros primos grandes e distintos denotados como p e q, depois calcule o valor de N
-long long int achar_n(long int p, long int q){ //pq ficou negativo quando entrei com os numero primos gigantes
+int achar_n(int p, int q){
     return p*q;
 }
 
 //segundo passo: totiente de n
-long long int return_totiente(long int p, long int q){ //pq ficou negativo quando entrei com os numero primos gigantes
+int return_totiente(int p, int q){
     return (p-1) * (q-1);
 }
 
@@ -68,13 +68,13 @@ int mdc_de_nao_primo(int num){
 
 
 //agora acha o "E"
-long long int achar_e(long long int n, long long int totiente){
+int achar_e(int n, int totiente){
     int *mod = malloc(100 * sizeof(int)); // Alocando dinamicamente memória para o vetor mod
     if (mod == NULL) {
         printf("Erro ao alocar memória.\n");
         exit(EXIT_FAILURE);
     }
-    long int aux_armazena=0; // Aqui definimos um array mod com espaço suficiente para armazenar valores
+    int aux_armazena=0; // Aqui definimos um array mod com espaço suficiente para armazenar valores
     for(int i=totiente; i>=0; i--){
         if(mdc(i,totiente) == 1){
             if(mdc(i,n) == 1){
@@ -98,17 +98,17 @@ long long int achar_e(long long int n, long long int totiente){
     return e;
 }
 
-int main (){//teste  num gigante -> p:104729 q:104743
-    int p_main=104729, q_main=104743;
+int main (){
+    int p_main=3, q_main=11;
     printf("P: %d\nQ: %d\n", p_main, q_main);
 
-    printf("N: %lld\n", achar_n(p_main,q_main));
+    printf("N: %d\n", achar_n(p_main,q_main));
 
-    printf("totiente: %lld\n", return_totiente(p_main,q_main));
+    printf("totiente: %d\n", return_totiente(p_main,q_main));
 
     verificar_nums_primos_p_q(p_main,q_main);
 
-    printf("E:%lld\n",achar_e(achar_n(p_main, q_main), return_totiente(p_main, q_main)));
+    printf("E:%d\n",achar_e(achar_n(p_main, q_main), return_totiente(p_main, q_main)));
 
     return 0;
 }
